@@ -17,9 +17,6 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
-env:
-  VITE_REDIRECT_TARGET: ${{ steps.deploy_to_pages.outputs.github_pages_url }}
-
 jobs:
   # Build job
   build:
@@ -27,6 +24,8 @@ jobs:
     environment:
       name: demo
       url: ${{ steps.deploy_to_pages.outputs.github_pages_url }}
+    env:
+      VITE_REDIRECT_TARGET: ${{ steps.deploy_to_pages.outputs.github_pages_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
