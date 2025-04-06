@@ -204,6 +204,11 @@ function App() {
     ["user-read-playback-state", "user-modify-playback-state", "streaming", "user-read-currently-playing", "user-read-email", "user-read-private"]
   );
 
+  // Avoid accumulating connected players on reload.
+  window.onbeforeunload = () => {
+    player?.disconnect();
+  }
+
   function getView(state: ViewState) {
     switch (state) {
       case ViewState.Scan: {
@@ -234,7 +239,7 @@ function App() {
           if (token !== null) {
             console.log("Finish player init")
             const player = new window.Spotify.Player({
-              name: 'Web Playback SDK',
+              name: 'Hitster Player',
               getOAuthToken: cb => {
                 cb(token.access_token);
               },
@@ -309,6 +314,7 @@ function App() {
     if (playerInitialised && !playerActive) {
       console.log("Player no longer active, re-initialising.")
       setPlayerInitialised(false);
+      player?.disconnect();
       connectToSpotify(true);
     }
   }, [playerInitialised, playerActive]);
