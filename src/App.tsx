@@ -100,6 +100,9 @@ class ScannerView extends Component<ViewProps> {
 
   render() {
     return <>
+      <button className="scanner-close-btn" onClick={() => this.props.changeViewState(ViewState.Home)}>
+        <span>&times;</span>
+      </button>
       <Scanner onScan={this.onScan} classNames={{container: 'qr-container', video: 'qr-video'}}
                allowMultiple={true}/>
       <div className="custom-viewfinder">
