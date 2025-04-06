@@ -17,6 +17,9 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+env:
+  VITE_REDIRECT_TARGET: ${{ steps.deploy_to_pages.outputs.github_pages_url }}
+
 jobs:
   # Build job
   build:
