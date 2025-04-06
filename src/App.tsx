@@ -191,7 +191,7 @@ class ListenView extends Component<ViewProps> {
 
 
 function App() {
-  const [viewState, setViewState] = useState<ViewState>(ViewState.Scan);
+  const [viewState, setViewState] = useState<ViewState>(ViewState.Home);
   const [spotifyUri, setSpotifyUri] = useState<string | undefined>(undefined);
   const [player, setPlayer] = useState<Spotify.Player | undefined>(undefined);
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
