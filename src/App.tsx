@@ -43,6 +43,14 @@ class HomeView extends Component<ViewProps> {
 class ScannerView extends Component<ViewProps> {
   hitsterPattern = new RegExp(/^www.hitstergame.com\/(?<countryId>[^/]+)(?:\/(?<sku>[^/]*))?\/(?<cardNumber>\d+)$/);
 
+  public async componentDidMount() {
+    const accessToken = await this.props.sdk?.getAccessToken();
+    if (!accessToken) {
+      // We're adding this here so auth flow will occur after the home screen but before any other app interactions.
+      await this.props.sdk?.authenticate();
+    }
+  }
+
   getSpotifyUri(countryId: string, cardNumber: string, sku?: string): string | undefined {
     const languageName = COUNTRIES[countryId];
     if (languageName === undefined) {
@@ -175,7 +183,7 @@ class ListenView extends Component<ViewProps> {
 
 
 function App() {
-  const [viewState, setViewState] = useState<ViewState>(ViewState.Scan);
+  const [viewState, setViewState] = useState<ViewState>(ViewState.Home);
   const [spotifyUri, setSpotifyUri] = useState<string | undefined>(undefined);
   const [player, setPlayer] = useState<Spotify.Player | undefined>(undefined);
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
@@ -192,7 +200,7 @@ function App() {
     switch (state) {
       case ViewState.Scan: {
         return (
-          <ScannerView changeViewState={setViewState} changeSpotifyUri={setSpotifyUri}/>
+          <ScannerView changeViewState={setViewState} changeSpotifyUri={setSpotifyUri} sdk={sdk}/>
         )
       }
       case ViewState.Listen: {
