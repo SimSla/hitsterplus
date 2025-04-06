@@ -33,7 +33,7 @@ class HomeView extends Component<ViewProps> {
   render() {
     return <>
       <img src={hitsterBanner} className="banner" alt="Hitster"/>
-      <button className="camera-button" onClick={() => this.props.changeViewState(ViewState.Scan)}></button>
+      <button className="camera-btn round-neon-btn" onClick={() => this.props.changeViewState(ViewState.Scan)}></button>
     </>;
   }
 }
@@ -100,7 +100,7 @@ class ScannerView extends Component<ViewProps> {
 
   render() {
     return <>
-      <button className="scanner-close-btn" onClick={() => this.props.changeViewState(ViewState.Home)}>
+      <button className="close-btn" onClick={() => this.props.changeViewState(ViewState.Home)}>
         <span>&times;</span>
       </button>
       <Scanner onScan={this.onScan} classNames={{container: 'qr-container', video: 'qr-video'}}
@@ -113,6 +113,9 @@ class ScannerView extends Component<ViewProps> {
 }
 
 class ListenView extends Component<ViewProps> {
+  state = {
+    progressionPercent: 0,
+  }
   private playDurationSeconds: number = 28.5;  // playback <30s shouldn't count towards recommendations
   private startTime: number = 0;
   private endTime: number = 0;
@@ -141,9 +144,13 @@ class ListenView extends Component<ViewProps> {
     if (this.canPlay && this.props.player !== undefined) {
       const progress = await this.props.player.getCurrentState();
       const position = progress?.position;
-      if (position !== undefined && position > this.endTime) {
-        this.canPlay = false;
-        await this.props.player.pause();
+      if (position !== undefined) {
+        this.setState({progressionPercent: 100 * (position - this.startTime) / (this.endTime - this.startTime)});
+        console.log(this.state.progressionPercent);
+        if (position > this.endTime) {
+          this.canPlay = false;
+          await this.props.player.pause();
+        }
       }
     }
   }
@@ -157,7 +164,6 @@ class ListenView extends Component<ViewProps> {
 
   public async componentDidUpdate(prevProps: ViewProps) {
     if (prevProps.spotifyUri !== this.props.spotifyUri && this.props.spotifyUri !== undefined) {
-      console.log("aaaaaaa", prevProps.spotifyUri, this.props.spotifyUri)
       await this.startNew(this.props.spotifyUri);
     } else if (this.props.spotifyUri === undefined) {
       await this.props.player?.pause();
@@ -182,11 +188,20 @@ class ListenView extends Component<ViewProps> {
 
   render() {
     return <>
-      <h1>Listen</h1>
-      <p>{this.props.spotifyUri}</p>
-      <button disabled={!this.canPlay} onClick={() => this.playPause()}>{this.props.playing ? "Pause" : "Play"}</button>
-      <button onClick={() => this.exitToScan()}>
-        Scan
+      <button className="close-btn close-btn-dark" onClick={() => this.props.changeViewState(ViewState.Home)}>
+        <span>&times;</span>
+      </button>
+      <button className="play-pause-btn"
+              disabled={!this.canPlay}
+              onClick={() => this.playPause()}
+              style={{'--progress-percent': `${this.state.progressionPercent}%`} as React.CSSProperties}>
+        <div className="progress-ring">
+          <div className="progress-inner"></div>
+        </div>
+        <div className={this.props.playing ? "pause-icon" : "play-icon"}></div>
+      </button>
+      <button className="listen-scan-btn" onClick={() => this.props.playing ? this.playPause() : this.exitToScan()}>
+        Scan next card
       </button>
     </>;
   }

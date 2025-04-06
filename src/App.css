@@ -18,17 +18,20 @@
     z-index: -1;
 }
 
-.camera-button {
+.camera-btn {
+    background-image: url('./assets/neon-camera.jpg');
+    background-size: cover; /* Ensures image covers the button while preserving aspect ratio */
+    background-position: center; /* Centers the image within the button */
+    background-repeat: no-repeat;
+}
+
+.round-neon-btn {
     width: 25vw;
     height: 25vw;
     max-width: 200px;
     max-height: 200px;
     border: none;
     border-radius: 50%; /* Makes the button round */
-    background-image: url('./assets/neon-camera.jpg');
-    background-size: cover; /* Ensures image covers the button while preserving aspect ratio */
-    background-position: center; /* Centers the image within the button */
-    background-repeat: no-repeat;
 
     cursor: pointer;
     transition: box-shadow 0.15s ease-in-out, transform 0.2s ease;
@@ -43,13 +46,13 @@
     z-index: 100;
 }
 
-.camera-button:hover {
+.round-neon-btn:hover {
     box-shadow: 0 0 1vw 0.2vw #9b59b6, /* Slightly dimmer and tighter glow */ 0 0 1.5vw 0.4vw #8e44ad,
     0 0 2vw 0.6vw rgba(155, 89, 182, 0.8);
     transform: translateX(-50%) scale(0.98); /* Slightly shrink the button to simulate interaction */
 }
 
-.camera-button:active {
+.round-neon-btn:active {
     transform: translateX(-50%) scale(0.95); /* Shrink button a little more */
     box-shadow: 0 0 0.8vw 0.15vw #7d3c98, /* Dim glow effect */ 0 0 1.2vw 0.3vw #6c3483,
     0 0 1.5vw 0.4vw rgba(125, 60, 152, 0.7);
@@ -114,7 +117,7 @@
     line-height: 1.4; /* Adjust spacing for multi-line text */
 }
 
-.scanner-close-btn {
+.close-btn {
     position: absolute; /* Independent positioning */
     top: min(2vw, 2vh); /* Adjust spacing from the top of the viewfinder */
     right: min(2vw, 2vh); /* Adjust spacing from the right of the viewfinder */
@@ -127,7 +130,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer; /* Show hand cursor on hover */
-    z-index: 3; /* Ensure it’s above other child elements */
+    z-index: 99999; /* Ensure it’s above other child elements */
 
     box-sizing: border-box;
     padding: 0;
@@ -138,11 +141,180 @@
     vertical-align: middle;
 }
 
-.scanner-close-btn > span {
+.close-btn-dark {
+    opacity: 0.4;
+    background-color: #3c3c3c;
+}
+
+.close-btn > span {
     transform: translateY(-2px);
     display: inline-block;
 }
 
+.listen-scan-btn {
+    position: absolute;
+    bottom: 5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+/* Media query for landscape orientation */
+@media (orientation: landscape) {
+    .listen-scan-btn {
+        left: auto; /* Remove the left centering */
+        right: 5vw; /* Position from the right instead */
+        transform: none; /* Remove the horizontal centering transform */
+        bottom: 5vh; /* Adjust bottom spacing as needed */
+    }
+}
+
+.play-pause-btn {
+    /* Double the width and height from 25vw to 50vw */
+    width: 50vw;
+    height: 50vw;
+
+    /* Increase max dimensions proportionally (2x) */
+    max-width: 400px;
+    max-height: 400px;
+
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.8);
+
+    position: fixed;
+    top: 50%; /* Change from bottom: 40% to top: 50% */
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    transform-origin: center;
+    z-index: 100;
+
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    /* Custom properties for colors stay the same */
+    --progress-percent: 0%;
+    --color-start: #9b59b6;
+    --color-end: #00bfff;
+    --color-glow-start: #8e44ad;
+    --color-glow-end: #0080ff;
+    --current-color: color-mix(in srgb, var(--color-start) calc(100% - var(--progress-percent)), var(--color-end) var(--progress-percent));
+    --current-glow: color-mix(in srgb, var(--color-glow-start) calc(100% - var(--progress-percent)), var(--color-glow-end) var(--progress-percent));
+    --current-glow-fade: color-mix(in srgb, rgba(155, 89, 182, 0.8) calc(100% - var(--progress-percent)), rgba(0, 128, 255, 0.8) var(--progress-percent));
+
+    /* Scale the box shadow proportionally (2x) */
+    box-shadow: 0 0 3vw 0.6vw var(--current-color),
+    0 0 5vw 1.2vw var(--current-glow),
+    0 0 6vw 1.8vw var(--current-glow-fade);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.play-pause-btn:hover {
+    /* Scale the hover shadow proportionally */
+    box-shadow: 0 0 2vw 0.4vw var(--current-color),
+    0 0 3vw 0.8vw var(--current-glow),
+    0 0 4vw 1.2vw var(--current-glow-fade);
+    transform: translate(-50%, -50%) scale(0.98);
+}
+
+.play-pause-btn:active {
+    transform: translate(-50%, -50%) scale(0.95);
+    box-shadow: 0 0 1.6vw 0.3vw color-mix(in srgb, #7d3c98 calc(100% - var(--progress-percent)), #0060b6 var(--progress-percent)),
+    0 0 2.4vw 0.6vw color-mix(in srgb, #6c3483 calc(100% - var(--progress-percent)), #004080 var(--progress-percent)),
+    0 0 3vw 0.8vw color-mix(in srgb, rgba(125, 60, 152, 0.7) calc(100% - var(--progress-percent)), rgba(0, 64, 128, 0.7) var(--progress-percent));
+    opacity: 0.9;
+}
+
+.play-pause-btn:disabled {
+    opacity: 0.1;
+    cursor: not-allowed;
+    box-shadow: 0 0 1vw 0.2vw color-mix(in srgb, rgba(155, 89, 182, 0.4) calc(100% - var(--progress-percent)), rgba(0, 128, 255, 0.4) var(--progress-percent));
+}
+
+/* Scale up the play icon (2x) */
+.play-icon {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 36px 0 36px 72px; /* Doubled from 18px/36px */
+    border-color: transparent transparent transparent #ffffff;
+    filter: drop-shadow(0 0 6px var(--current-color)) drop-shadow(0 0 10px var(--current-glow));
+    transition: filter 0.15s ease;
+    position: relative;
+    left: 10px; /* Doubled from 5px */
+    z-index: 100;
+}
+
+/* Scale up the pause icon (2x) */
+.pause-icon {
+    width: 72px; /* Doubled from 36px */
+    height: 72px; /* Doubled from 36px */
+    display: flex;
+    justify-content: space-between;
+    filter: drop-shadow(0 0 6px var(--current-color)) drop-shadow(0 0 10px var(--current-glow));
+    transition: filter 0.15s ease;
+    position: relative;
+    z-index: 100;
+}
+
+/* Scale the pause bars */
+.pause-icon::before,
+.pause-icon::after {
+    content: '';
+    display: block;
+    width: 24px; /* Doubled from 12px */
+    height: 72px; /* Doubled from 36px */
+    background-color: #ffffff;
+    position: relative;
+}
+
+.play-pause-btn:hover .play-icon,
+.play-pause-btn:hover .pause-icon {
+    filter: drop-shadow(0 0 10px var(--current-color)) drop-shadow(0 0 16px var(--current-glow));
+}
+
+.progress-ring {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 50vw;
+    height: 50vw;
+    max-width: 400px;
+    max-height: 400px;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    pointer-events: none;
+
+    /* The outer circle with progress */
+    border-radius: 50%;
+    background-image: conic-gradient(
+            white 0deg,
+            white var(--progress-percent, 45%), /* Default to 45% for testing */ transparent var(--progress-percent, 45%)
+    );
+}
+
+.progress-inner {
+    /* The inner hole */
+    --ring-width: 0.5vw;
+    position: absolute;
+    top: var(--ring-width);
+    left: var(--ring-width);
+    right: var(--ring-width);
+    bottom: var(--ring-width);
+    width: calc(100% - 2 * var(--ring-width));
+    height: calc(100% - 2 * var(--ring-width));
+    border-radius: 50%;
+
+    /* Make it match the background behind the play button */
+    background-color: rgba(0, 0, 0, 1.0);
+
+    /* Center it */
+    margin: auto;
+}
 
 .logo {
     height: 6em;
