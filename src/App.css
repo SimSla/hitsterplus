@@ -1,4 +1,4 @@
-#root {
+#root:not(:has(.qr-container)) {
     max-width: 1280px;
     margin: 0 auto;
     padding: 2rem;
@@ -17,6 +17,103 @@
     height: auto;
     z-index: -1;
 }
+
+.camera-button {
+    width: 25vw;
+    height: 25vw;
+    max-width: 200px;
+    max-height: 200px;
+    border: none;
+    border-radius: 50%; /* Makes the button round */
+    background-image: url('./assets/neon-camera.jpg');
+    background-size: cover; /* Ensures image covers the button while preserving aspect ratio */
+    background-position: center; /* Centers the image within the button */
+    background-repeat: no-repeat;
+
+    cursor: pointer;
+    transition: box-shadow 0.15s ease-in-out, transform 0.2s ease;
+    box-shadow: 0 0 1.5vw 0.3vw #9b59b6, /* Sharper purple glow */ 0 0 2.5vw 0.6vw #8e44ad,
+    0 0 3vw 0.9vw rgba(155, 89, 182, 0.8); /* Subtle neon glow always present */
+
+    position: fixed;
+    bottom: 25vh;
+    left: 50%;
+    transform: translateX(-50%);
+    transform-origin: center;
+    z-index: 100;
+}
+
+.camera-button:hover {
+    box-shadow: 0 0 1vw 0.2vw #9b59b6, /* Slightly dimmer and tighter glow */ 0 0 1.5vw 0.4vw #8e44ad,
+    0 0 2vw 0.6vw rgba(155, 89, 182, 0.8);
+    transform: translateX(-50%) scale(0.98); /* Slightly shrink the button to simulate interaction */
+}
+
+.camera-button:active {
+    transform: translateX(-50%) scale(0.95); /* Shrink button a little more */
+    box-shadow: 0 0 0.8vw 0.15vw #7d3c98, /* Dim glow effect */ 0 0 1.2vw 0.3vw #6c3483,
+    0 0 1.5vw 0.4vw rgba(125, 60, 152, 0.7);
+    opacity: 0.9; /* Slightly dim the entire element */
+}
+
+.qr-container {
+    width: 100%;
+    height: 100%;
+    position: relative; /* Establishes positioning context */
+    overflow: hidden; /* Keep contents within screen bounds */
+    background-color: #000; /* Black fallback background */
+}
+
+.qr-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Make video fill the screen horizontally */
+    height: 100%; /* Make video fill the screen vertically */
+    object-fit: cover; /* Maintain aspect ratio and crop as needed */
+    z-index: 1; /* Video stays behind other elements */
+    background-color: #000; /* Fallback color for video loading issues */
+}
+
+.qr-container > svg {
+    visibility: hidden;
+}
+
+.custom-viewfinder {
+    position: fixed; /* Fixed to the entire viewport */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    width: min(75vw, 75vh); /* Scales width relative to the screen */
+    height: min(75vw, 75vh); /* Scales height relative to the screen */
+    transform: translate(-50%, -50%); /* Centers the viewfinder on its size */
+    border: 4px solid rgba(255, 255, 255, 0.8); /* Bright white border */
+    border-radius: 8px; /* Optional: Rounded corners */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Optional: Glow */
+    z-index: 2; /* Sits above the video */
+    pointer-events: none; /* Prevent interactions */
+    background: transparent; /* Transparent background */
+    box-sizing: border-box; /* Ensures dimensions include border width */
+    opacity: 0.5;
+
+    /* Flexbox for inner alignment */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Push text to the bottom */
+    align-items: center; /* Center text horizontally */
+    padding: 10px; /* Add space between the text and the border */
+}
+
+.viewfinder-text {
+    font-size: 1.2em; /* Adjust size as needed */
+    color: rgba(255, 255, 255, 0.9); /* Bright white for visibility */
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.5); /* Shadow for contrast */
+    text-align: center; /* Center-align if the text wraps */
+    margin: 0; /* Remove default paragraph margin */
+    pointer-events: none; /* Ensure text doesn’t block interaction */
+    font-family: Arial, sans-serif; /* Clean, readable font */
+    line-height: 1.4; /* Adjust spacing for multi-line text */
+}
+
 
 .logo {
     height: 6em;

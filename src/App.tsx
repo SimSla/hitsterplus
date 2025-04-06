@@ -33,9 +33,7 @@ class HomeView extends Component<ViewProps> {
   render() {
     return <>
       <img src={hitsterBanner} className="banner" alt="Hitster"/>
-      <button onClick={() => this.props.changeViewState(ViewState.Scan)}>
-        Scan
-      </button>
+      <button className="camera-button" onClick={() => this.props.changeViewState(ViewState.Scan)}></button>
     </>;
   }
 }
@@ -102,7 +100,11 @@ class ScannerView extends Component<ViewProps> {
 
   render() {
     return <>
-      <Scanner onScan={this.onScan} classNames={{container: 'qr-container', video: 'qr-video'}} allowMultiple={true}/>
+      <Scanner onScan={this.onScan} classNames={{container: 'qr-container', video: 'qr-video'}}
+               allowMultiple={true}/>
+      <div className="custom-viewfinder">
+        <p className="viewfinder-text">scan your card</p>
+      </div>
     </>;
   }
 }
@@ -189,7 +191,7 @@ class ListenView extends Component<ViewProps> {
 
 
 function App() {
-  const [viewState, setViewState] = useState<ViewState>(ViewState.Home);
+  const [viewState, setViewState] = useState<ViewState>(ViewState.Scan);
   const [spotifyUri, setSpotifyUri] = useState<string | undefined>(undefined);
   const [player, setPlayer] = useState<Spotify.Player | undefined>(undefined);
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
