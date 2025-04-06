@@ -47,6 +47,7 @@ class ScannerView extends Component<ViewProps> {
     const accessToken = await this.props.sdk?.getAccessToken();
     if (!accessToken) {
       // We're adding this here so auth flow will occur after the home screen but before any other app interactions.
+      console.log("SDK authentication proc")
       await this.props.sdk?.authenticate();
     }
   }
@@ -188,12 +189,14 @@ function App() {
   const [player, setPlayer] = useState<Spotify.Player | undefined>(undefined);
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined);
   const [playing, setPlaying] = useState(false);
-  // const [active, setActive] = useState(false);
+
+  const [playerInitialised, setPlayerInitialised] = useState(false);
+  const [playerActive, setPlayerActive] = useState(false);
 
   const sdk = SpotifyApi.withUserAuthorization(
     import.meta.env.VITE_SPOTIFY_CLIENT_ID,
     import.meta.env.VITE_REDIRECT_TARGET,
-    ["user-read-playback-state", "user-modify-playback-state", "streaming"]
+    ["user-read-playback-state", "user-modify-playback-state", "streaming", "user-read-currently-playing", "user-read-email", "user-read-private"]
   );
 
   function getView(state: ViewState) {
@@ -217,51 +220,80 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    if (!document.getElementById("spotify-web-player")) {
+  async function connectToSpotify(reconnect = false) {
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      console.log("onSpotifyWebPlaybackSDKReady");
+      sdk.authenticate().then(() => {
+        sdk.getAccessToken().then(token => {
+          console.log("onSpotifyWebPlaybackSDKReady -> getAccessToken", token);
+          if (token !== null) {
+            console.log("Finish player init")
+            const player = new window.Spotify.Player({
+              name: 'Web Playback SDK',
+              getOAuthToken: cb => {
+                cb(token.access_token);
+              },
+              volume: 1.0
+            });
+
+            setPlayer(player);
+
+            player.addListener('ready', ({device_id}) => {
+              console.log('Ready with Device ID', device_id);
+              setPlayerActive(true);
+              setPlayerInitialised(true);
+              setDeviceId(device_id);
+            });
+
+            player.addListener('not_ready', ({device_id}) => {
+              console.log('Device ID has gone offline', device_id);
+              setPlayerActive(false);
+            });
+
+            player.addListener('player_state_changed', (state => {
+              console.log("Player state changed", state);
+              if (!state) {
+                return;
+              }
+              setPlaying(!state.paused);
+              player.getCurrentState().then((state) => {
+                setPlayerActive(!!state);
+                console.log("State pulled.", state);
+              });
+            }));
+            player.connect();
+          }
+        })
+      })
+    };
+
+    const prevScript = document.getElementById("spotify-web-player");
+    if (prevScript === null || reconnect) {
+      prevScript?.remove();
       const script = document.createElement("script");
       script.src = "https://sdk.scdn.co/spotify-player.js";
       script.async = true;
       script.id = "spotify-web-player";
       document.body.appendChild(script);
+      console.log("Inserted web-player-sdk script.");
     }
+  }
 
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      sdk.getAccessToken().then(token => {
-        if (token !== null) {
-          const player = new window.Spotify.Player({
-            name: 'Web Playback SDK',
-            getOAuthToken: cb => {
-              cb(token.access_token);
-            },
-            volume: 1.0
-          });
+  // On mount.
+  useEffect(() => {
+    console.log("Connect on mount.")
+    connectToSpotify();
+  }, []);  // <-- empty deps, should only run once.
 
-          setPlayer(player);
 
-          player.addListener('ready', ({device_id}) => {
-            console.log('Ready with Device ID', device_id);
-            setDeviceId(device_id);
-          });
-
-          player.addListener('not_ready', ({device_id}) => {
-            console.log('Device ID has gone offline', device_id);
-          });
-
-          player.addListener('player_state_changed', (state => {
-            if (!state) {
-              return;
-            }
-            setPlaying(!state.paused);
-            // player.getCurrentState().then(state =>
-            //   (!state) ? setActive(false) : setActive(true)
-            // );
-          }));
-          player.connect();
-        }
-      })
-    };
-  });
+  // Reinitialise when we lose contact.
+  useEffect(() => {
+    if (playerInitialised && !playerActive) {
+      console.log("Player no longer active, re-initialising.")
+      setPlayerInitialised(false);
+      connectToSpotify(true);
+    }
+  }, [playerInitialised, playerActive]);
 
   return getView(viewState);
 }
