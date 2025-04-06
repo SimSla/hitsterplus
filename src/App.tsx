@@ -115,6 +115,7 @@ class ListenView extends Component<ViewProps> {
 
   private async startNew(uri: string) {
     const track = await this.props.sdk?.tracks?.get(uri, "BE");  // TODO don't hardcode market
+
     if (track !== undefined) {
       const duration = track.duration_ms;
       const maxStart = duration - this.playDurationSeconds * 1000;
@@ -122,9 +123,12 @@ class ListenView extends Component<ViewProps> {
       this.endTime = this.startTime + this.playDurationSeconds * 1000;
     }
     if (this.props.player !== undefined && this.props.deviceId !== undefined) {
-      this.canPlay = true;
+      const devices = await this.props.sdk?.player.getAvailableDevices();
+      console.log("available devices", devices);
+      console.log("current device", this.props.deviceId);
       await this.props.sdk?.player.startResumePlayback(this.props.deviceId, undefined, ["spotify:track:" + uri]);
       await this.props.player?.seek(this.startTime);
+      this.canPlay = true;
     }
   }
 
@@ -148,6 +152,7 @@ class ListenView extends Component<ViewProps> {
 
   public async componentDidUpdate(prevProps: ViewProps) {
     if (prevProps.spotifyUri !== this.props.spotifyUri && this.props.spotifyUri !== undefined) {
+      console.log("aaaaaaa", prevProps.spotifyUri, this.props.spotifyUri)
       await this.startNew(this.props.spotifyUri);
     } else if (this.props.spotifyUri === undefined) {
       await this.props.player?.pause();
@@ -248,6 +253,19 @@ function App() {
             player.addListener('not_ready', ({device_id}) => {
               console.log('Device ID has gone offline', device_id);
               setPlayerActive(false);
+            });
+
+            player.on('initialization_error', ({message}) => {
+              console.error('Failed to initialize', message);
+            });
+            player.on('authentication_error', ({message}) => {
+              console.error('Failed to authenticate', message);
+            });
+            player.on('account_error', ({message}) => {
+              console.error('Failed to validate Spotify account', message);
+            });
+            player.on('playback_error', ({message}) => {
+              console.error('Failed to perform playback', message);
             });
 
             player.addListener('player_state_changed', (state => {
