@@ -108,7 +108,7 @@ class ScannerView extends Component<ViewProps> {
 }
 
 class ListenView extends Component<ViewProps> {
-  private playDurationSeconds: number = 30;
+  private playDurationSeconds: number = 28.5;  // playback <30s shouldn't count towards recommendations
   private startTime: number = 0;
   private endTime: number = 0;
   private canPlay: boolean = false;
