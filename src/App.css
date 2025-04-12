@@ -15,15 +15,15 @@
 }
 
 .camera-btn {
-    background-image: url('./assets/neon-camera-2.jpg');
+    background-image: url('./assets/neon-camera.jpg');
     background-size: cover;
-    background-position: calc(50% + 0.2vw) calc(50% - 0.5vw); /* 10px right, 5px up from center */
+    background-position: center;
     background-repeat: no-repeat;
 }
 
 .round-neon-btn {
-    width: 25vw;
-    height: 25vw;
+    width: min(25vw, 25vh);
+    height: min(25vw, 25vh);
     max-width: 200px;
     max-height: 200px;
     border: none;
@@ -31,8 +31,8 @@
 
     cursor: pointer;
     transition: box-shadow 0.15s ease-in-out, transform 0.2s ease;
-    box-shadow: 0 0 1.5vw 0.3vw #9b59b6, /* Sharper purple glow */ 0 0 2.5vw 0.6vw #8e44ad,
-    0 0 3vw 0.9vw rgba(155, 89, 182, 0.8); /* Subtle neon glow always present */
+    box-shadow: 0 0 min(1.5vw, 1.5vh) min(0.3vw, 0.3vh) #9b59b6, /* Sharper purple glow */ 0 0 min(2.5vw, 2.5vh) min(0.6vw, 0.6vh) #8e44ad,
+    0 0 min(3vw, 3vh) min(0.9vw, 0.9vh) rgba(155, 89, 182, 0.8); /* Subtle neon glow always present */
 
     position: fixed;
     bottom: 25vh;
@@ -43,15 +43,15 @@
 }
 
 .round-neon-btn:hover {
-    box-shadow: 0 0 1vw 0.2vw #9b59b6, /* Slightly dimmer and tighter glow */ 0 0 1.5vw 0.4vw #8e44ad,
-    0 0 2vw 0.6vw rgba(155, 89, 182, 0.8);
+    box-shadow: 0 0 min(1vw, 1vh) min(0.2vw, 0.2vh) #9b59b6, /* Slightly dimmer and tighter glow */ 0 0 min(1.5vw, 1.5vh) min(0.4vw, 0.4vh) #8e44ad,
+    0 0 min(2vw, 2vh) min(0.6vw, 0.6vh) rgba(155, 89, 182, 0.8);
     transform: translateX(-50%) scale(0.98); /* Slightly shrink the button to simulate interaction */
 }
 
 .round-neon-btn:active {
     transform: translateX(-50%) scale(0.95); /* Shrink button a little more */
-    box-shadow: 0 0 0.8vw 0.15vw #7d3c98, /* Dim glow effect */ 0 0 1.2vw 0.3vw #6c3483,
-    0 0 1.5vw 0.4vw rgba(125, 60, 152, 0.7);
+    box-shadow: 0 0 min(0.8vw, 0.8vh) min(0.15vw, 0.15vh) #7d3c98, /* Dim glow effect */ 0 0 min(1.2vw, 1.2vh) min(0.3vw, 0.3vh) #6c3483,
+    0 0 min(1.5vw, 1.5vh) min(0.4vw, 0.4vh) rgba(125, 60, 152, 0.7);
     opacity: 0.9; /* Slightly dim the entire element */
 }
 
@@ -64,8 +64,6 @@
     }
 
     .camera-btn {
-        width: 25vh;
-        height: 25vh;
         bottom: 15vh;
     }
 }
