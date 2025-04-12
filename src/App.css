@@ -138,7 +138,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer; /* Show hand cursor on hover */
     z-index: 99999; /* Ensure it’s above other child elements */
 
     box-sizing: border-box;
