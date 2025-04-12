@@ -167,6 +167,16 @@
     z-index: 3;
 }
 
+.highlight-btn {
+    transition: box-shadow 0.5s ease-in-out, transform 0.2s ease;
+    box-shadow: 0 0 min(0.3vw, 0.3vh) min(0.06vw, 0.06vh) #9b59b6, /* Sharper purple glow */ 0 0 min(0.5vw, 0.5vh) min(0.12vw, 0.12vh) #8e44ad,
+    0 0 min(0.6vw, 0.6vh) min(0.18vw, 0.18vh) rgba(155, 89, 182, 0.8); /* Subtle neon glow always present */
+}
+
+.highlight-btn:hover {
+    border-color: #c45de4;
+}
+
 /* Media query for landscape orientation */
 @media (orientation: landscape) {
     .listen-scan-btn {

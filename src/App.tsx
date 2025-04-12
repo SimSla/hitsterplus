@@ -122,6 +122,7 @@ class ListenView extends Component<ViewProps> {
   private startTime: number = 0;
   private endTime: number = 0;
   private canPlay: boolean = false;
+  private donePlaying: boolean = false;
 
   private async startNew(uri: string) {
     const track = await this.props.sdk?.tracks?.get(uri, "BE");  // TODO don't hardcode market
@@ -150,6 +151,7 @@ class ListenView extends Component<ViewProps> {
         this.setState({progressionPercent: 100 * (position - this.startTime) / (this.endTime - this.startTime)});
         if (position > this.endTime) {
           this.canPlay = false;
+          this.donePlaying = true;
           await this.props.player.pause();
         }
       }
@@ -211,7 +213,7 @@ class ListenView extends Component<ViewProps> {
         </div>
         <div className={this.props.playing ? "pause-icon" : "play-icon"}></div>
       </button>
-      <button className="listen-scan-btn"
+      <button className={this.donePlaying ? "listen-scan-btn highlight-btn" : "listen-scan-btn"}
               onClick={() => this.tryExitToScan()}>
         Scan next card
       </button>
