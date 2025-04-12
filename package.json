@@ -16,10 +16,14 @@
     "alert": "^6.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-keep-awake": "^0.2.0"
+    "use-stay-awake": "^0.1.7"
   },
   "overrides": {
     "alert": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "use-stay-awake": {
       "react": "$react",
       "react-dom": "$react-dom"
     }
