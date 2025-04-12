@@ -253,6 +253,14 @@
     box-shadow: 0 0 1vw 0.2vw color-mix(in srgb, rgba(155, 89, 182, 0.4) calc(100% - var(--progress-percent)), rgba(0, 128, 255, 0.4) var(--progress-percent));
 }
 
+.loading-icon {
+    width: 20vw !important;
+    height: 20vw !important;
+    margin: unset !important;
+    opacity: 0.5;
+    z-index: 100;
+}
+
 /* Scale up the play icon (2x) */
 .play-icon {
     width: 0;

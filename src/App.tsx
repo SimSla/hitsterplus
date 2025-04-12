@@ -121,6 +121,7 @@ class ListenView extends Component<ViewProps> {
   private playDurationSeconds: number = 28.5;  // playback <30s shouldn't count towards recommendations
   private startTime: number = 0;
   private endTime: number = 0;
+  private loading: boolean = true;
   private canPlay: boolean = false;
   private donePlaying: boolean = false;
 
@@ -140,6 +141,7 @@ class ListenView extends Component<ViewProps> {
       await this.props.sdk?.player.startResumePlayback(this.props.deviceId, undefined, ["spotify:track:" + uri]);
       await this.props.player?.seek(this.startTime);
       this.canPlay = true;
+      this.loading = false;
     }
   }
 
@@ -204,14 +206,16 @@ class ListenView extends Component<ViewProps> {
       <button className="close-btn close-btn-dark" onClick={() => this.exitTo(ViewState.Home)}>
         <span>&times;</span>
       </button>
+      {this.loading ? <div className="loading-icon"></div> : null}
       <button className="play-pause-btn"
               disabled={!this.canPlay}
+              hidden={this.loading}
               onClick={() => this.playPause()}
               style={{'--progress-percent': `${this.state.progressionPercent}%`} as React.CSSProperties}>
         <div className="progress-ring">
           <div className="progress-inner"></div>
         </div>
-        <div className={this.props.playing ? "pause-icon" : "play-icon"}></div>
+        <div className={this.loading ? "" : (this.props.playing ? "pause-icon" : "play-icon")}></div>
       </button>
       <button className={this.donePlaying ? "listen-scan-btn highlight-btn" : "listen-scan-btn"}
               onClick={() => this.tryExitToScan()}>
