@@ -198,7 +198,6 @@ class ListenView extends Component<ViewProps> {
 
   render() {
     return <>
-      <KeepAwake/>
       <Toaster/>
       <button className="close-btn close-btn-dark" onClick={() => this.exitTo(ViewState.Home)}>
         <span>&times;</span>
@@ -251,8 +250,12 @@ function App() {
       }
       case ViewState.Listen: {
         return (
-          <ListenView spotifyUri={spotifyUri} changeViewState={setViewState} changeSpotifyUri={setSpotifyUri} sdk={sdk}
-                      deviceId={deviceId} player={player} playing={playing}/>
+          <>
+            <KeepAwake/>
+            <ListenView spotifyUri={spotifyUri} changeViewState={setViewState} changeSpotifyUri={setSpotifyUri}
+                        sdk={sdk}
+                        deviceId={deviceId} player={player} playing={playing}/>
+          </>
         )
       }
       default: {
