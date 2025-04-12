@@ -4,7 +4,7 @@ import {SpotifyApi} from '@spotify/web-api-ts-sdk';
 import hitsterBanner from './assets/hitster-banner.png'
 import gamesetDatabaseJson from './assets/gameset_database.json';
 import countriesJson from './assets/countries.json';
-import {KeepAwake} from 'react-keep-awake'
+import {useKeepAwake} from 'react-keep-awake'
 import {Toaster, toast} from 'alert';
 
 import './App.css'
@@ -235,6 +235,7 @@ function App() {
     import.meta.env.VITE_REDIRECT_TARGET,
     ["user-read-playback-state", "user-modify-playback-state", "streaming", "user-read-currently-playing", "user-read-email", "user-read-private"]
   );
+  useKeepAwake();
 
   // Avoid accumulating connected players on reload.
   window.onbeforeunload = () => {
@@ -251,7 +252,6 @@ function App() {
       case ViewState.Listen: {
         return (
           <>
-            <KeepAwake/>
             <ListenView spotifyUri={spotifyUri} changeViewState={setViewState} changeSpotifyUri={setSpotifyUri}
                         sdk={sdk}
                         deviceId={deviceId} player={player} playing={playing}/>
