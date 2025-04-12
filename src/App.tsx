@@ -178,18 +178,18 @@ class ListenView extends Component<ViewProps> {
     }
   }
 
-  async exitToScan() {
+  async exitTo(state: ViewState) {
     await this.props.player?.pause();
     if (this.props.changeSpotifyUri !== undefined) {
       this.props.changeSpotifyUri(undefined);
     }
-    this.props.changeViewState(ViewState.Scan);
+    this.props.changeViewState(state);
   }
 
   render() {
     return <>
       <KeepAwake/>
-      <button className="close-btn close-btn-dark" onClick={() => this.props.changeViewState(ViewState.Home)}>
+      <button className="close-btn close-btn-dark" onClick={() => this.exitTo(ViewState.Home)}>
         <span>&times;</span>
       </button>
       <button className="play-pause-btn"
@@ -201,7 +201,8 @@ class ListenView extends Component<ViewProps> {
         </div>
         <div className={this.props.playing ? "pause-icon" : "play-icon"}></div>
       </button>
-      <button className="listen-scan-btn" onClick={() => this.props.playing ? this.playPause() : this.exitToScan()}>
+      <button className="listen-scan-btn"
+              onClick={() => this.props.playing ? this.playPause() : this.exitTo(ViewState.Scan)}>
         Scan next card
       </button>
     </>;
