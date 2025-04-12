@@ -181,7 +181,7 @@ class ListenView extends Component<ViewProps> {
 
   async tryExitToScan() {
     if (this.props.playing) {
-      toast("Music paused. Press again to scan next card.");
+      toast("Paused. Press again to scan.");
       await this.props.player?.pause();
     } else {
       await this.exitTo(ViewState.Scan);
