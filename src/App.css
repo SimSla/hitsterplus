@@ -6,10 +6,6 @@
 }
 
 .banner {
-
-}
-
-.banner {
     position: fixed;
     top: 0;
     left: 0;
@@ -57,6 +53,21 @@
     box-shadow: 0 0 0.8vw 0.15vw #7d3c98, /* Dim glow effect */ 0 0 1.2vw 0.3vw #6c3483,
     0 0 1.5vw 0.4vw rgba(125, 60, 152, 0.7);
     opacity: 0.9; /* Slightly dim the entire element */
+}
+
+@media (orientation: landscape) {
+    .banner {
+        left: 50%;
+        width: unset;
+        height: 50vh;
+        transform: translateX(-50%);
+    }
+
+    .camera-btn {
+        width: 25vh;
+        height: 25vh;
+        bottom: 15vh;
+    }
 }
 
 .qr-container {
