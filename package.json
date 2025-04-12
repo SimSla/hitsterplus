@@ -11,10 +11,11 @@
   },
   "dependencies": {
     "@spotify/web-api-ts-sdk": "^1.2.0",
-    "@yudiel/react-qr-scanner": "^2.2.1",
     "@types/spotify-web-playback-sdk": "^0.1.19",
+    "@yudiel/react-qr-scanner": "^2.2.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-keep-awake": "^0.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

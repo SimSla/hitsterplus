@@ -4,6 +4,7 @@ import {SpotifyApi} from '@spotify/web-api-ts-sdk';
 import hitsterBanner from './assets/hitster-banner.png'
 import gamesetDatabaseJson from './assets/gameset_database.json';
 import countriesJson from './assets/countries.json';
+import {KeepAwake} from 'react-keep-awake'
 
 import './App.css'
 import {IDetectedBarcode} from "@yudiel/react-qr-scanner/dist/types";
@@ -45,7 +46,7 @@ class ScannerView extends Component<ViewProps> {
     const accessToken = await this.props.sdk?.getAccessToken();
     if (!accessToken) {
       // We're adding this here so auth flow will occur after the home screen but before any other app interactions.
-      console.log("SDK authentication proc")
+      console.debug("SDK authentication proc")
       await this.props.sdk?.authenticate();
     }
   }
@@ -132,7 +133,7 @@ class ListenView extends Component<ViewProps> {
     }
     if (this.props.player !== undefined && this.props.deviceId !== undefined) {
       const devices = await this.props.sdk?.player.getAvailableDevices();
-      console.log("available devices", devices);
+      console.debug("available devices", devices);
       console.log("current device", this.props.deviceId);
       await this.props.sdk?.player.startResumePlayback(this.props.deviceId, undefined, ["spotify:track:" + uri]);
       await this.props.player?.seek(this.startTime);
@@ -146,7 +147,6 @@ class ListenView extends Component<ViewProps> {
       const position = progress?.position;
       if (position !== undefined) {
         this.setState({progressionPercent: 100 * (position - this.startTime) / (this.endTime - this.startTime)});
-        console.log(this.state.progressionPercent);
         if (position > this.endTime) {
           this.canPlay = false;
           await this.props.player.pause();
@@ -188,6 +188,7 @@ class ListenView extends Component<ViewProps> {
 
   render() {
     return <>
+      <KeepAwake/>
       <button className="close-btn close-btn-dark" onClick={() => this.props.changeViewState(ViewState.Home)}>
         <span>&times;</span>
       </button>
@@ -252,12 +253,12 @@ function App() {
 
   async function connectToSpotify(reconnect = false) {
     window.onSpotifyWebPlaybackSDKReady = () => {
-      console.log("onSpotifyWebPlaybackSDKReady");
+      console.debug("onSpotifyWebPlaybackSDKReady");
       sdk.authenticate().then(() => {
         sdk.getAccessToken().then(token => {
-          console.log("onSpotifyWebPlaybackSDKReady -> getAccessToken", token);
+          console.debug("onSpotifyWebPlaybackSDKReady -> getAccessToken", token);
           if (token !== null) {
-            console.log("Finish player init")
+            console.debug("Finish player init")
             const player = new window.Spotify.Player({
               name: 'Hitster Player',
               getOAuthToken: cb => {
@@ -294,14 +295,14 @@ function App() {
             });
 
             player.addListener('player_state_changed', (state => {
-              console.log("Player state changed", state);
+              console.debug("Player state changed", state);
               if (!state) {
                 return;
               }
               setPlaying(!state.paused);
               player.getCurrentState().then((state) => {
                 setPlayerActive(!!state);
-                console.log("State pulled.", state);
+                console.debug("State pulled.", state);
               });
             }));
             player.connect();
@@ -318,13 +319,13 @@ function App() {
       script.async = true;
       script.id = "spotify-web-player";
       document.body.appendChild(script);
-      console.log("Inserted web-player-sdk script.");
+      console.debug("Inserted web-player-sdk script.");
     }
   }
 
   // On mount.
   useEffect(() => {
-    console.log("Connect on mount.")
+    console.debug("Connect on mount.")
     connectToSpotify();
   }, []);  // <-- empty deps, should only run once.
 
@@ -332,7 +333,7 @@ function App() {
   // Reinitialise when we lose contact.
   useEffect(() => {
     if (playerInitialised && !playerActive) {
-      console.log("Player no longer active, re-initialising.")
+      console.debug("Player no longer active, re-initialising.")
       setPlayerInitialised(false);
       player?.disconnect();
       connectToSpotify(true);
