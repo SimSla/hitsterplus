@@ -19,9 +19,9 @@
 }
 
 .camera-btn {
-    background-image: url('./assets/neon-camera.jpg');
-    background-size: cover; /* Ensures image covers the button while preserving aspect ratio */
-    background-position: center; /* Centers the image within the button */
+    background-image: url('./assets/neon-camera-2.jpg');
+    background-size: cover;
+    background-position: calc(50% + 0.2vw) calc(50% - 0.5vw); /* 10px right, 5px up from center */
     background-repeat: no-repeat;
 }
 
