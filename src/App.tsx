@@ -5,6 +5,7 @@ import hitsterBanner from './assets/hitster-banner.png'
 import gamesetDatabaseJson from './assets/gameset_database.json';
 import countriesJson from './assets/countries.json';
 import {KeepAwake} from 'react-keep-awake'
+import {Toaster, toast} from 'alert';
 
 import './App.css'
 import {IDetectedBarcode} from "@yudiel/react-qr-scanner/dist/types";
@@ -178,6 +179,15 @@ class ListenView extends Component<ViewProps> {
     }
   }
 
+  async tryExitToScan() {
+    if (this.props.playing) {
+      toast("Music paused. Press again to scan next card.");
+      await this.props.player?.pause();
+    } else {
+      await this.exitTo(ViewState.Scan);
+    }
+  }
+
   async exitTo(state: ViewState) {
     await this.props.player?.pause();
     if (this.props.changeSpotifyUri !== undefined) {
@@ -189,6 +199,7 @@ class ListenView extends Component<ViewProps> {
   render() {
     return <>
       <KeepAwake/>
+      <Toaster/>
       <button className="close-btn close-btn-dark" onClick={() => this.exitTo(ViewState.Home)}>
         <span>&times;</span>
       </button>
@@ -202,7 +213,7 @@ class ListenView extends Component<ViewProps> {
         <div className={this.props.playing ? "pause-icon" : "play-icon"}></div>
       </button>
       <button className="listen-scan-btn"
-              onClick={() => this.props.playing ? this.playPause() : this.exitTo(ViewState.Scan)}>
+              onClick={() => this.tryExitToScan()}>
         Scan next card
       </button>
     </>;

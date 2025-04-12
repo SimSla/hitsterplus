@@ -13,9 +13,14 @@
     "@spotify/web-api-ts-sdk": "^1.2.0",
     "@types/spotify-web-playback-sdk": "^0.1.19",
     "@yudiel/react-qr-scanner": "^2.2.1",
+    "alert": "^6.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-keep-awake": "^0.2.0"
+  },
+  "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
