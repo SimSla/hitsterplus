@@ -4,7 +4,7 @@ import {SpotifyApi} from '@spotify/web-api-ts-sdk';
 import hitsterBanner from './assets/hitster-banner.png'
 import gamesetDatabaseJson from './assets/gameset_database.json';
 import countriesJson from './assets/countries.json';
-import {KeepAwake} from 'react-keep-awake'
+import {useKeepAwake} from 'react-keep-awake'
 import {Toaster, toast} from 'alert';
 
 import './App.css'
@@ -198,7 +198,6 @@ class ListenView extends Component<ViewProps> {
 
   render() {
     return <>
-      <KeepAwake/>
       <Toaster/>
       <button className="close-btn close-btn-dark" onClick={() => this.exitTo(ViewState.Home)}>
         <span>&times;</span>
@@ -242,7 +241,13 @@ function App() {
     player?.disconnect();
   }
 
+  function keepAwake(active: boolean) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useKeepAwake(active);
+  }
+
   function getView(state: ViewState) {
+    keepAwake(false);
     switch (state) {
       case ViewState.Scan: {
         return (
@@ -250,6 +255,7 @@ function App() {
         )
       }
       case ViewState.Listen: {
+        keepAwake(true);
         return (
           <ListenView spotifyUri={spotifyUri} changeViewState={setViewState} changeSpotifyUri={setSpotifyUri} sdk={sdk}
                       deviceId={deviceId} player={player} playing={playing}/>
