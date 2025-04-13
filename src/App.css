@@ -19,6 +19,26 @@
     z-index: -1;
 }
 
+.footer-text {
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    color: #323232;
+    z-index: 1;
+
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+
+    a {
+        color: rgba(125, 60, 152, 0.7);
+    }
+}
+
 .camera-btn {
     background-image: url('./assets/neon-camera.jpg');
     background-size: cover;

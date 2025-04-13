@@ -36,6 +36,9 @@ class HomeView extends Component<ViewProps> {
     return <>
       <img src={hitsterBanner} className="banner" alt="Hitster"/>
       <button className="camera-btn round-neon-btn" onClick={() => this.props.changeViewState(ViewState.Scan)}></button>
+      <span className="footer-text">
+        Unofficial app for the <a href="https://hitstergame.com/" target="_blank">Hitster</a> music card game.
+      </span>
     </>;
   }
 }
