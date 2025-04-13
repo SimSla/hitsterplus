@@ -8,9 +8,14 @@
 .banner {
     position: fixed;
     top: 0;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
     width: 100%;
+    max-width: 900px;
+    max-height: 501px;
     height: auto;
+
     z-index: -1;
 }
 
@@ -20,6 +25,7 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+
 
 .round-neon-btn {
     width: min(25vw, 25vh);
@@ -57,10 +63,8 @@
 
 @media (orientation: landscape) {
     .banner {
-        left: 50%;
         width: unset;
         height: 50vh;
-        transform: translateX(-50%);
     }
 
     .camera-btn {
